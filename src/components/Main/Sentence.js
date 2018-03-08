@@ -22,30 +22,30 @@ const Sentence = (props) => {
     const {
         cht,
         eng,
-        line,
         index,
-        i,
         currentInput,
+        isCurrentLine,
+        finished,
     } = props;
 
     const sent = (
         <EngContainer>
-            {i === line && (
+            {isCurrentLine && (
                 <div>
                     <Finish>{eng.slice(0, index - currentInput.length)}</Finish>
                     <Wrong>{currentInput}</Wrong>
                     <NotFinish>{eng.slice(index)}</NotFinish>
                 </div>
             )}
-            {i < line && <div>
+            {!isCurrentLine && finished && <div>
                 <Finish>{eng}</Finish><Icon type="check-circle-o" />
             </div>}
-            {i > line && <NotFinish>{eng}</NotFinish>}
+            {!isCurrentLine && !finished && <NotFinish>{eng}</NotFinish>}
         </EngContainer>
     );
 
     return (
-        <div key={i}>
+        <div onClick={props.onClick}>
             <h3>{cht}</h3>
             {sent}
             <Divider />
