@@ -1,26 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
+import Sentence from './Sentence';
+import data from './data';
 
-const data = [
-    {
-        eng: 'The greatest people are self-managing.',
-        cht: '偉大的人總是能夠自我管理'
-    }, {
-        eng: `They don't need to be managed.`,
-        cht: '他們不需要被管理'
-    }
-]
-
-const NotFinish = styled.span `
-    color: #D0D9DB;
-`;
-
-const Finish = styled.span `
-    color: #000;
-`;
-
-const Wrong = styled.span `
-    color: red;
+const Container = styled.div`
+    margin: 40px;
 `;
 
 class Main extends Component {
@@ -29,19 +13,31 @@ class Main extends Component {
         this.state = {
             line: 0,
             index: 0,
-            currentInput: ""
+            currentInput: '',
         };
 
         this.onHandleKeydown = this
             .onHandleKeydown
             .bind(this);
+        this.fetchData = () => { };
+    }
+
+    componentDidMount() {
+        document.addEventListener('keydown', this.onHandleKeydown);
+        this.fetchData();
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.onHandleKeydown);
     }
 
     onHandleKeydown(e) {
-        const {key} = e;
-        console.log(key);
-        let {index, line, currentInput} = this.state;
-        const {eng} = data[line];
+        e.preventDefault();
+        const { key } = e;
+        let { index, line, currentInput } = this.state;
+        if (line >= data.length) { return; }
+
+        const { eng } = data[line];
         if (key.length === 1) {
             if (!currentInput) {
                 if (key !== eng[index]) {
@@ -52,70 +48,41 @@ class Main extends Component {
                     index = 0;
                     line += 1;
                 }
-                this.setState({currentInput, index, line});
+                this.setState({ currentInput, index, line });
             } else if (key !== eng[index - 1]) {
-                this.setState({currentInput: key});
+                this.setState({ currentInput: key });
             } else {
-                this.setState({currentInput: ""});
+                this.setState({ currentInput: '' });
             }
-        } else if (key === "Backspace") {
+        } else if (key === 'Backspace') {
             index -= 1;
             this.setState({
-                currentInput: "",
-                index: index >= 0
-                    ? index
-                    : 0
+                currentInput: '',
+                index: index >= 0 ? index: 0,
             });
         }
     }
 
-    componentDidMount() {
-        document.addEventListener("keydown", this.onHandleKeydown);
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener("keydown", this.onHandleKeydown);
-    }
-
     render() {
-        const {line, index, currentInput} = this.state;
+        const { line, index, currentInput } = this.state;
+        let keyCounter = 0;
         const Sents = data.map((e, i) => {
-            const {cht, eng} = e;
-            let sent;
-            if (i < line) {
-                sent = (
-                    <p>
-                        <Finish>{eng}</Finish>
-                    </p>
-                )
-            } else if (i > line) {
-                sent = (
-                    <p>
-                        <NotFinish>{eng}</NotFinish>
-                    </p>
-                )
-            } else {
-                sent = (
-                    <p>
-                        <Finish>{eng.slice(0, index - currentInput.length)}</Finish>
-                        <Wrong>{currentInput}</Wrong>
-                        <NotFinish>{eng.slice(index)}</NotFinish>
-                    </p>
-                )
-            }
-
-            return (
-                <div key={i}>
-                    <h3>{cht}</h3>
-                    {sent}
-                </div>
-            )
-        })
+            const { cht, eng } = e;
+            return (<Sentence
+                currentInput={currentInput}
+                key={keyCounter++}
+                cht={cht}
+                eng={eng}
+                line={line}
+                index={index}
+                i={i}
+            />);
+        });
         return (
-            <div>
+            <Container>
                 {Sents}
-            </div>
-        )
+            </Container>
+        );
     }
 }
 
