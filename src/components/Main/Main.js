@@ -69,7 +69,7 @@ class Main extends Component {
                 });
             }
         };
-        
+
         this.fetchData = () => { };
 
         this.onHandleClick = (line) => {
@@ -122,6 +122,7 @@ class Main extends Component {
                     { finishedNum } / { totalNum }
                     <Progress percent={finishedNum/totalNum * 100} showInfo={false}/>
                 </PointContainer>
+                <iframe title="embed" width="560" height="525" src="https://tw.voicetube.com/embed/59532" frameBorder="0" allowFullScreen/>>
                 {Sents}
             </Container>
         );
