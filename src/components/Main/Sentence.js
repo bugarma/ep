@@ -1,21 +1,23 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Divider, Icon } from 'antd';
 
-const NotFinish = styled.span`
-    color: #D0D9DB;
-`;
-
-const Finish = styled.span`
-    color: #000;
-`;
-
-const Wrong = styled.span`
-    color: red;
-`;
-
 const EngContainer = styled.h3`
+    white-space: pre;
     
+    .check {
+        color: #46C8AE;
+    }
+    .finised {
+        color: #000;
+    }
+    .not-finished {
+        color: #D0D9DB;
+    }
+    .wrong {
+        color: red;
+    }
 `;
 
 const Sentence = (props) => {
@@ -25,22 +27,22 @@ const Sentence = (props) => {
         index,
         currentInput,
         isCurrentLine,
-        finished,
+        isFinished,
     } = props;
 
     const sent = (
         <EngContainer>
             {isCurrentLine && (
                 <div>
-                    <Finish>{eng.slice(0, index - currentInput.length)}</Finish>
-                    <Wrong>{currentInput}</Wrong>
-                    <NotFinish>{eng.slice(index)}</NotFinish>
+                    <span className="finished">{eng.slice(0, index - currentInput.length)}</span>
+                    <span className="wrong">{currentInput}</span>
+                    <span className="not-finished">{eng.slice(index)}</span>
                 </div>
             )}
-            {!isCurrentLine && finished && <div>
-                <Finish>{eng}</Finish><Icon type="check-circle-o" />
+            {!isCurrentLine && isFinished && <div>
+                <span className="finished">{eng}</span><Icon className="check" type="check-circle-o" />
             </div>}
-            {!isCurrentLine && !finished && <NotFinish>{eng}</NotFinish>}
+            {!isCurrentLine && !isFinished && <span className="not-finished">{eng}</span>}
         </EngContainer>
     );
 
@@ -51,6 +53,16 @@ const Sentence = (props) => {
             <Divider />
         </div>
     );
+};
+
+Sentence.propTypes = {
+    cht: PropTypes.string.isRequired,
+    eng: PropTypes.string.isRequired,
+    index: PropTypes.number.isRequired,
+    currentInput: PropTypes.string.isRequired,
+    isCurrentLine: PropTypes.bool.isRequired,
+    isFinished: PropTypes.bool.isRequired,
+    onClick: PropTypes.func.isRequired,
 };
 
 export default Sentence;
