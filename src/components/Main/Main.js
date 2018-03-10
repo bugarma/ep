@@ -18,7 +18,7 @@ const PointContainer = styled.h2`
 class Main extends Component {
     constructor(props) {
         super(props);
-        this.state = {
+        this.state = JSON.parse(localStorage.getItem('main')) || {
             line: 0,
             index: 0,
             currentInput: '',
@@ -27,9 +27,49 @@ class Main extends Component {
 
         this.sents = [];
 
-        this.onHandleKeydown = this
-            .onHandleKeydown
-            .bind(this);
+        this.onHandleKeydown = (e) => {
+            const { key } = e;
+            if(key === " ") {
+                e.preventDefault();
+            }
+    
+            let { index, line, currentInput } = this.state;
+            if (line >= data.length) { return; }
+    
+            
+            const { finished } = this.state;
+            const { eng } = data[line];
+    
+            if (key.length === 1) {
+                if (index >= eng.length - 1 && eng[eng.length - 1] === key) {
+                    index = 0;
+                    const newFinished = finished.slice();
+                    newFinished[line] = true;
+                    line += 1;
+    
+                    this.setState({ index, line, finished: newFinished, currentInput: "" });
+                    this.scrollToView(this.sents[line]);
+                } else if (!currentInput) {
+                    if (key !== eng[index]) {
+                        currentInput = key;
+                    }
+                    index += 1;
+    
+                    this.setState({ currentInput, index });
+                } else if (key !== eng[index - 1]) {
+                    this.setState({ currentInput: key });
+                } else {
+                    this.setState({ currentInput: '' });
+                }
+            } else if (key === 'Backspace') {
+                index -= 1;
+                this.setState({
+                    currentInput: '',
+                    index: index >= 0 ? index : 0,
+                });
+            }
+        };
+        
         this.fetchData = () => { };
 
         this.onHandleClick = (line) => {
@@ -45,54 +85,14 @@ class Main extends Component {
 
     componentDidMount() {
         document.addEventListener('keydown', this.onHandleKeydown);
-        this.fetchData();
+    }
+
+    componentWillUpdate(props, state) {
+        localStorage.setItem('main', JSON.stringify(state));
     }
 
     componentWillUnmount() {
         document.removeEventListener('keydown', this.onHandleKeydown);
-    }
-
-    onHandleKeydown(e) {
-        const { key } = e;
-        if(key === " ") {
-            e.preventDefault();
-        }
-
-        let { index, line, currentInput } = this.state;
-        if (line >= data.length) { return; }
-
-        
-        const { finished } = this.state;
-        const { eng } = data[line];
-
-        if (key.length === 1) {
-            if (index >= eng.length - 1 && eng[eng.length - 1] === key) {
-                index = 0;
-                const newFinished = finished.slice();
-                newFinished[line] = true;
-                line += 1;
-
-                this.setState({ index, line, finished: newFinished, currentInput: "" });
-                this.scrollToView(this.sents[line]);
-            } else if (!currentInput) {
-                if (key !== eng[index]) {
-                    currentInput = key;
-                }
-                index += 1;
-
-                this.setState({ currentInput, index });
-            } else if (key !== eng[index - 1]) {
-                this.setState({ currentInput: key });
-            } else {
-                this.setState({ currentInput: '' });
-            }
-        } else if (key === 'Backspace') {
-            index -= 1;
-            this.setState({
-                currentInput: '',
-                index: index >= 0 ? index : 0,
-            });
-        }
     }
 
     render() {

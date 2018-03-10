@@ -32,14 +32,14 @@ const Sentence = (props) => {
 
     const sent = (
         <EngContainer>
-            {isCurrentLine && (
+            {isCurrentLine && !isFinished && (
                 <div>
                     <span className="finished">{eng.slice(0, index - currentInput.length)}</span>
                     <span className="wrong">{currentInput}</span>
                     <span className="not-finished">{eng.slice(index)}</span>
                 </div>
             )}
-            {!isCurrentLine && isFinished && <div>
+            {isFinished && <div>
                 <span className="finished">{eng}</span><Icon className="check" type="check-circle-o" />
             </div>}
             {!isCurrentLine && !isFinished && <span className="not-finished">{eng}</span>}
