@@ -81,7 +81,7 @@ class Main extends Component {
         this.handleSelectChange = (number) =>{
             axios.get(`/api/article/${number}`).then(res => {
                 const { body } = res.data;
-                console.log(body);
+                
                 this.setState({
                     line: 0,
                     index: 0,
