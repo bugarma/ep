@@ -26,6 +26,7 @@ class Main extends Component {
             currentInput: '',
             body: [],
             finished: [],
+            number: null,
         };
 
         this.sents = [];
@@ -88,7 +89,8 @@ class Main extends Component {
                     currentInput: '',
                     body,
                     finished: Array(body.length).fill(false),
-                    number
+                    number,
+                    ...JSON.parse(localStorage.getItem(number.toString())),
                 })
             });
         };
@@ -105,7 +107,10 @@ class Main extends Component {
     }
 
     componentWillUpdate(props, state) {
-        localStorage.setItem('main', JSON.stringify(state));
+        const { number } = this.state;
+        if(number){
+            localStorage.setItem(this.state.number.toString(), JSON.stringify(state));
+        }
     }
 
     componentWillUnmount() {
