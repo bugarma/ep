@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Divider, Icon } from 'antd';
 
 const EngContainer = styled.h3`
-    white-space: pre;
+    white-space: pre-line;
     
     .check {
         color: #46C8AE;
@@ -33,15 +33,15 @@ const Sentence = (props) => {
     const sent = (
         <EngContainer>
             {isCurrentLine && !isFinished && (
-                <div>
+                <span>
                     <span className="finished">{eng.slice(0, index - currentInput.length)}</span>
                     <span className="wrong">{currentInput}</span>
                     <span className="not-finished">{eng.slice(index)}</span>
-                </div>
+                </span>
             )}
-            {isFinished && <div>
-                <span className="finished">{eng}</span><Icon className="check" type="check-circle-o" />
-            </div>}
+            {isFinished &&
+                <span className="finished">{eng}<Icon className="check" type="check-circle-o" /></span>
+            }
             {!isCurrentLine && !isFinished && <span className="not-finished">{eng}</span>}
         </EngContainer>
     );

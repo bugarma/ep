@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { animateScroll as scroll } from "react-scroll";
-import { Progress } from "antd";
+import { Progress, Col, Row } from "antd";
 import axios from "axios";
 import styled from 'styled-components';
 import Sentence from './Sentence';
@@ -8,14 +8,33 @@ import List from '../List/List';
 
 
 const Container = styled.div`
-    margin: 40px;
+    padding: 40px;
 `;
 
 const PointContainer = styled.h2`
     position: fixed;
     right: 40px;
     top: 40px;
+`;
+
+const SentWrapper = styled.div`
+    height: calc(100vh - 200px);
+    overflow: auto;
 `
+
+const IframeWrapper = styled.div`
+    position: relative;
+    padding-bottom: 100%; /* 16:9 */
+    padding-top: 25px;
+    height: 0;
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+`;
 
 class Main extends Component {
     constructor(props) {
@@ -96,9 +115,10 @@ class Main extends Component {
         };
 
         this.scrollToView = (elem) => {
+            if(!elem) return;
             const top = elem.offsetTop;
             const { innerHeight } = window;
-            scroll.scrollTo(top - innerHeight / 2);
+            scroll.scrollTo(top - innerHeight / 2, {containerId: "__sent_wrapper"});
         };
     }
 
@@ -107,9 +127,9 @@ class Main extends Component {
     }
 
     componentWillUpdate(props, state) {
-        const { number } = this.state;
+        const { number } = state;
         if(number){
-            localStorage.setItem(this.state.number.toString(), JSON.stringify(state));
+            localStorage.setItem(number.toString(), JSON.stringify(state));
         }
     }
 
@@ -140,6 +160,7 @@ class Main extends Component {
 
         const finishedNum = finished.reduce((a, b) => a + b, 0);
         const totalNum = finished.length;
+        // const height = window.innerHeight;
 
         return (
             <Container ref={ref => { this.con = ref; }}>
@@ -148,8 +169,18 @@ class Main extends Component {
                     { finishedNum } / { totalNum }
                     <Progress percent={finishedNum/totalNum * 100} showInfo={false}/>
                 </PointContainer>
-                {number && <iframe title="embed" width="560" height="525" src={`https://tw.voicetube.com/embed/${number}`} frameBorder="0" allowFullScreen/>}
-                {Sents}
+                {number && <Row>
+                    <Col span={12}>
+                        <SentWrapper id="__sent_wrapper">
+                            {Sents}
+                        </SentWrapper>
+                    </Col>
+                    <Col span={12}>
+                        <IframeWrapper>
+                            <iframe title="embed" src={`https://tw.voicetube.com/embed/${number}`} frameBorder="0" allowFullScreen/>
+                        </IframeWrapper>
+                    </Col>
+                </Row>}
             </Container>
         );
     }
