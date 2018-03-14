@@ -30,7 +30,7 @@ class List extends Component {
         const { onChange } = this.props;
         
         return (
-            <Select onChange={onChange} style={{ width: 300 }}>
+            <Select onChange={onChange} style={{ width: 500 }}>
                 {options.length && options.map((e) => (
                     <Option key={e.number} value={e.number}>{e.title}</Option>
                 ))}
