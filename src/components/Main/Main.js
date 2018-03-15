@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { animateScroll as scroll } from "react-scroll";
-import { Progress, Col, Row } from "antd";
+import { Progress, Col, Row, Button } from "antd";
 import axios from "axios";
 import styled from 'styled-components';
 import Sentence from './Sentence';
@@ -24,9 +24,7 @@ const SentWrapper = styled.div`
 
 const IframeWrapper = styled.div`
     position: relative;
-    padding-bottom: 100%; /* 16:9 */
-    padding-top: 25px;
-    height: 0;
+    height: calc(100vh - 200px);
     iframe {
         position: absolute;
         top: 0;
@@ -110,9 +108,19 @@ class Main extends Component {
                     finished: Array(body.length).fill(false),
                     number,
                     ...JSON.parse(localStorage.getItem(number.toString())),
-                })
+                });
             });
         };
+
+        this.resetStorage = () => {
+            localStorage.removeItem(this.state.number);
+            this.setState({
+                line: 0,
+                index: 0,
+                currentInput: '',
+                finished: Array(this.state.body.length).fill(false),
+            });
+        }
 
         this.scrollToView = (elem) => {
             if(!elem) return;
@@ -164,7 +172,10 @@ class Main extends Component {
 
         return (
             <Container ref={ref => { this.con = ref; }}>
-                <List onChange={this.handleSelectChange}/><br/><br/>
+                <Row type="flex" justify="space-between" style={{marginBottom: 20}}>
+                    <List onChange={this.handleSelectChange}/>
+                    {number && <Button icon="reload" onClick={this.resetStorage}>Reset</Button>}
+                </Row>
                 <PointContainer style={{ position: 'fixed', right: 40, top: 40 }}>
                     { finishedNum } / { totalNum }
                     <Progress percent={finishedNum/totalNum * 100} showInfo={false}/>
