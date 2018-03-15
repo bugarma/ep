@@ -95,9 +95,20 @@ class Main extends Component {
         };
 
         this.handleSelectChange = (number) =>{
-            axios.get(`/api/article/${number}`).then(res => {
-                const { body } = res.data;
-                
+            axios.get(`https://cors.io/?https://tw.voicetube.com/videos/print/${number}?eng_zh_tw=1`).then(res => {
+                const parser = new DOMParser().parseFromString(res.data, "text/html");
+                const spans = [...parser.querySelectorAll('li span')];
+
+                const body = spans.map(e => {
+                    const s = e.innerHTML.split(/(?:<br>)|(?:<br\/>)/);
+                    const eng = new DOMParser().parseFromString(s[0], "text/html").querySelector('body').textContent.trim();
+                    const cht = new DOMParser().parseFromString(s[1], "text/html").querySelector('body').textContent.trim();
+
+                    return {
+                        eng,
+                        cht
+                    };
+                })                
                 this.setState({
                     line: 0,
                     index: 0,

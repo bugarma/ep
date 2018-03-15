@@ -13,11 +13,19 @@ class List extends Component {
             options: [],
         };
         this.fetchList = () => {
-            axios.get(`/api/article`).then(res => {
-                this.setState({
-                    options: res.data,
-                })
-            })
+            axios.get(`https://cors.io/?https://tw.voicetube.com/channel/translated?time=short&order-type=collect&ref=nav-sub&accent=us`).then(res => {
+                const parser = new DOMParser().parseFromString(res.data, "text/html");
+                const links = [...parser.querySelectorAll('div.photo')];
+
+                const options = links.map((e) => {
+                    const { href } = e.querySelector("a");
+                    const number = href.split('/')[4].split('?')[0];
+                    const { alt } = e.querySelector("img");
+                    
+                    return { number, title: alt };
+                });
+                this.setState({options});
+            });
         }
     }
 
