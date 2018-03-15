@@ -12,9 +12,7 @@ const Container = styled.div`
 `;
 
 const PointContainer = styled.h2`
-    position: fixed;
-    right: 40px;
-    top: 40px;
+    margin: 0;
 `;
 
 const SentWrapper = styled.div`
@@ -125,8 +123,8 @@ class Main extends Component {
         this.scrollToView = (elem) => {
             if(!elem) return;
             const top = elem.offsetTop;
-            const { innerHeight } = window;
-            scroll.scrollTo(top - innerHeight / 2, {containerId: "__sent_wrapper"});
+            const height = window.innerHeight - 200;
+            scroll.scrollTo(top - height / 2, {containerId: "__sent_wrapper"});
         };
     }
 
@@ -168,18 +166,17 @@ class Main extends Component {
 
         const finishedNum = finished.reduce((a, b) => a + b, 0);
         const totalNum = finished.length;
-        // const height = window.innerHeight;
 
         return (
             <Container ref={ref => { this.con = ref; }}>
                 <Row type="flex" justify="space-between" style={{marginBottom: 20}}>
                     <List onChange={this.handleSelectChange}/>
-                    {number && <Button icon="reload" onClick={this.resetStorage}>Reset</Button>}
+                    <PointContainer>
+                        { finishedNum } / { totalNum }
+                        <Progress percent={finishedNum/totalNum * 100} showInfo={false}/>
+                    </PointContainer>
+                    <span>{number && <Button icon="reload" onClick={this.resetStorage}>Reset</Button>}</span>
                 </Row>
-                <PointContainer style={{ position: 'fixed', right: 40, top: 40 }}>
-                    { finishedNum } / { totalNum }
-                    <Progress percent={finishedNum/totalNum * 100} showInfo={false}/>
-                </PointContainer>
                 {number && <Row>
                     <Col span={12}>
                         <SentWrapper id="__sent_wrapper">
