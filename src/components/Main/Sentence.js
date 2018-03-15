@@ -13,7 +13,7 @@ const EngContainer = styled.h3`
         color: #000;
     }
     .not-finished {
-        color: #D0D9DB;
+        color: #B1B1B1;
     }
     .wrong {
         color: red;
