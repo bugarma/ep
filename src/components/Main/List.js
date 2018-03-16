@@ -13,7 +13,7 @@ class List extends Component {
             options: [],
         };
         this.fetchList = () => {
-            axios.get(`https://cors.io/?https://tw.voicetube.com/channel/translated?time=short&order-type=collect&ref=nav-sub&accent=us`).then(res => {
+            axios.get(`https://cors-anywhere.herokuapp.com/https://tw.voicetube.com/channel/translated?time=short&order-type=collect&ref=nav-sub&accent=us`).then(res => {
                 const parser = new DOMParser().parseFromString(res.data, "text/html");
                 const links = [...parser.querySelectorAll('div.photo')];
 
@@ -35,11 +35,11 @@ class List extends Component {
 
     render() {
         const { options } = this.state;
-        const { onChange } = this.props;
+        const { onChange, placeholder } = this.props;
         
         return (
             <div>
-                <Select onChange={onChange} style={{ width: 500 }} placeholder="Select an aritcle...">
+                <Select onChange={onChange} style={{ width: 500 }} placeholder={placeholder}>
                     {options.length && options.map((e) => (
                         <Option key={e.number} value={e.number}>{e.title}</Option>
                     ))}
@@ -51,6 +51,11 @@ class List extends Component {
 
 List.propTypes = {
     onChange: PropTypes.func.isRequired,
+    placeholder: PropTypes.string,
+};
+
+List.defaultProps = {
+    placeholder: "Select an aritcle..."
 };
 
 export default List;
