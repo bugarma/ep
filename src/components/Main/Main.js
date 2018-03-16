@@ -4,8 +4,9 @@ import { Progress, Col, Row, Button } from "antd";
 import axios from "axios";
 import styled from 'styled-components';
 import Sentence from './Sentence';
-import List from '../List/List';
-
+import List from './List';
+import Clock from "./Clock";
+import Intro from "./Intro";
 
 const Container = styled.div`
     padding: 40px;
@@ -95,7 +96,7 @@ class Main extends Component {
         };
 
         this.handleSelectChange = (number) =>{
-            axios.get(`https://cors.io/?https://tw.voicetube.com/videos/print/${number}?eng_zh_tw=1`).then(res => {
+            axios.get(`https://cors-anywhere.herokuapp.com/https://tw.voicetube.com/videos/print/${number}?eng_zh_tw=1`).then(res => {
                 const parser = new DOMParser().parseFromString(res.data, "text/html");
                 const spans = [...parser.querySelectorAll('li span')];
 
@@ -156,6 +157,12 @@ class Main extends Component {
 
     render() {
         const { line, index, currentInput, finished, body, number } = this.state;
+        if(number === null){
+            return (
+                <Intro onChange={this.handleSelectChange}/>
+            );
+        }
+
         let keyCounter = 0;
         let Sents;
         if (body.length){
@@ -182,10 +189,11 @@ class Main extends Component {
             <Container ref={ref => { this.con = ref; }}>
                 <Row type="flex" justify="space-between" style={{marginBottom: 20}}>
                     <List onChange={this.handleSelectChange}/>
-                    <PointContainer>
+                    {/* <Clock/> */}
+                    {number && <PointContainer>
                         { finishedNum } / { totalNum }
                         <Progress percent={finishedNum/totalNum * 100} showInfo={false}/>
-                    </PointContainer>
+                    </PointContainer>}
                     <span>{number && <Button icon="reload" onClick={this.resetStorage}>Reset</Button>}</span>
                 </Row>
                 {number && <Row>
