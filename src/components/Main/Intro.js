@@ -6,7 +6,7 @@ import axios from "axios";
 
 const Wrapper = styled(Row)`
     height: 100vh;
-    width: 100vw;
+    width: 100%;
     font-size: 4em;
 
     .drop {
@@ -16,21 +16,21 @@ const Wrapper = styled(Row)`
 
     .button {
         font-size: 4em;
-        color: #c2e59c !important;
+        color: #64b3f4 !important;
         -webkit-text-fill-color: none;
     }
 
     .text {
         background: #c2e59c;  /* fallback for old browsers */
-        background: -webkit-linear-gradient(to right, #64b3f4, #c2e59c);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to right, #64b3f4, #c2e59c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        background: -webkit-linear-gradient(to left, #64b3f4, #c2e59c);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to left, #64b3f4, #c2e59c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
     .box {
-        background: linear-gradient(to right, #64b3f4, #c2e59c);
+        background: linear-gradient(to left, #64b3f4, #c2e59c);
         padding: 1.5px;
     }
 `;

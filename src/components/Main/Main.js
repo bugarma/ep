@@ -14,6 +14,9 @@ const Container = styled.div`
 
 const PointContainer = styled.h2`
     margin: 0;
+    width: 200px;
+    text-align: center;
+    color: #64b3f4;
 `;
 
 const SentWrapper = styled.div`
@@ -191,21 +194,21 @@ class Main extends Component {
                     <List onChange={this.handleSelectChange}/>
                     {/* <Clock/> */}
                     {number && <PointContainer>
-                        { finishedNum } / { totalNum }
+                        已完成 { finishedNum } / { totalNum }
                         <Progress percent={finishedNum/totalNum * 100} showInfo={false}/>
                     </PointContainer>}
                     <span>{number && <Button icon="reload" onClick={this.resetStorage}>Reset</Button>}</span>
                 </Row>
-                {number && <Row>
-                    <Col span={12}>
-                        <SentWrapper id="__sent_wrapper">
-                            {Sents}
-                        </SentWrapper>
-                    </Col>
+                {number && <Row gutter={20}>
                     <Col span={12}>
                         <IframeWrapper>
                             <iframe title="embed" src={`https://tw.voicetube.com/embed/${number}`} frameBorder="0" allowFullScreen/>
                         </IframeWrapper>
+                    </Col>
+                    <Col span={12}>
+                        <SentWrapper id="__sent_wrapper">
+                            {Sents}
+                        </SentWrapper>
                     </Col>
                 </Row>}
             </Container>
