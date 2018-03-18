@@ -5,7 +5,7 @@ import { Row, Dropdown, Menu, Icon } from 'antd';
 import axios from "axios";
 
 const Wrapper = styled(Row)`
-    height: 100vh;
+    height: 100%;
     width: 100%;
     font-size: 4em;
 
@@ -60,6 +60,7 @@ MyMenu.propTypes = {
         number: PropTypes.string,
         title: PropTypes.string,
     })),
+    handleClick: PropTypes.func.isRequired,
 };
 
 MyMenu.defaultProps = {
@@ -104,6 +105,9 @@ class Intro extends Component {
 
         return (
             <Wrapper type="flex" justify="center" align="middle">
+                <div className="text">
+                    Practing English by Typing
+                </div>
                 <div className="drop">
                     <Dropdown overlay={menu} placement="bottomCenter">
                         <div>
