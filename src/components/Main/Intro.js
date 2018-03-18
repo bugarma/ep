@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Row, Dropdown, Menu, Icon } from 'antd';
-import axios from "axios";
+import { connect } from "react-redux";
+import { fetchList } from "../../actions/articleAction";
 
 const Wrapper = styled(Row)`
     height: 100%;
@@ -70,24 +71,6 @@ MyMenu.defaultProps = {
 class Intro extends Component {
     constructor(props){
         super(props);
-        this.state = {
-            options: []
-        };
-        this.fetchList = () => {
-            axios.get(`https://cors-anywhere.herokuapp.com/https://tw.voicetube.com/channel/translated?time=short&order-type=collect&ref=nav-sub&accent=us`).then(res => {
-                const parser = new DOMParser().parseFromString(res.data, "text/html");
-                const links = [...parser.querySelectorAll('div.photo')];
-
-                const options = links.map((e) => {
-                    const { href } = e.querySelector("a");
-                    const number = href.split('/')[4].split('?')[0];
-                    const { alt } = e.querySelector("img");
-                    
-                    return { number, title: alt };
-                });
-                this.setState({options});
-            });
-        }
 
         this.handleClick = ({ key }) => {
             this.props.onChange(key);
@@ -95,13 +78,13 @@ class Intro extends Component {
     }
 
     componentDidMount(){
-        this.fetchList();
+        this.props.fetchList();
     }
 
     render() {
-        const { options } = this.state;
+        const { list } = this.props;
 
-        const menu = (<MyMenu options={options} handleClick={this.handleClick}/>);
+        const menu = (<MyMenu options={list} handleClick={this.handleClick}/>);
 
         return (
             <Wrapper type="flex" justify="center" align="middle">
@@ -123,6 +106,17 @@ class Intro extends Component {
 
 Intro.propTypes = {
     onChange: PropTypes.func.isRequired,
+    list: PropTypes.arrayOf({
+        number: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+    }).isRequired,
+    fetchList: PropTypes.func.isRequired,
 };
 
-export default Intro;
+function mapStateToProps(state) {
+    return {
+        list: state.articleReducer.list
+    }
+}
+
+export default connect(mapStateToProps, { fetchList })(Intro);
