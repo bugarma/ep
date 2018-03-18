@@ -1,57 +1,30 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from "prop-types";
 import { Select } from "antd";
-import axios from "axios";
-
 
 const { Option } = Select;
 
-class List extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            options: [],
-        };
-        this.fetchList = () => {
-            axios.get(`https://cors-anywhere.herokuapp.com/https://tw.voicetube.com/channel/translated?time=short&order-type=collect&ref=nav-sub&accent=us`).then(res => {
-                const parser = new DOMParser().parseFromString(res.data, "text/html");
-                const links = [...parser.querySelectorAll('div.photo')];
-
-                const options = links.map((e) => {
-                    const { href } = e.querySelector("a");
-                    const number = href.split('/')[4].split('?')[0];
-                    const { alt } = e.querySelector("img");
-                    
-                    return { number, title: alt };
-                });
-                this.setState({options});
-            });
-        }
-    }
-
-    componentDidMount(){
-        this.fetchList();
-    }
-
-    render() {
-        const { options } = this.state;
-        const { onChange, placeholder } = this.props;
-        
-        return (
-            <div>
-                <Select onChange={onChange} style={{ width: 500 }} placeholder={placeholder}>
-                    {options.length && options.map((e) => (
-                        <Option key={e.number} value={e.number}>{e.title}</Option>
-                    ))}
-                </Select>
-            </div>
-        );
-    }
+const List = (props) => {
+    const { onChange, placeholder, list, number } = props;
+    return (
+        <div>
+            <Select value={number} onChange={onChange} style={{ width: 500 }} placeholder={placeholder}>
+                {list.length && list.map((e) => (
+                    <Option key={e.number} value={e.number}>{e.title}</Option>
+                ))}
+            </Select>
+        </div>
+    );
 }
 
 List.propTypes = {
     onChange: PropTypes.func.isRequired,
     placeholder: PropTypes.string,
+    list: PropTypes.arrayOf(PropTypes.shape({
+        number: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+    })).isRequired,
+    number: PropTypes.string.isRequired,
 };
 
 List.defaultProps = {

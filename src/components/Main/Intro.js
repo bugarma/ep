@@ -106,10 +106,10 @@ class Intro extends Component {
 
 Intro.propTypes = {
     onChange: PropTypes.func.isRequired,
-    list: PropTypes.arrayOf({
+    list: PropTypes.arrayOf(PropTypes.shape({
         number: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
-    }).isRequired,
+    })).isRequired,
     fetchList: PropTypes.func.isRequired,
 };
 

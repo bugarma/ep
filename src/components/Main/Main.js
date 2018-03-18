@@ -3,10 +3,14 @@ import { animateScroll as scroll } from "react-scroll";
 import { Progress, Col, Row, Button } from "antd";
 import axios from "axios";
 import styled from 'styled-components';
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+
 import Sentence from './Sentence';
 import List from './List';
 import Clock from "./Clock";
 import Intro from "./Intro";
+
 
 const Container = styled.div`
     padding: 40px;
@@ -166,6 +170,8 @@ class Main extends Component {
             );
         }
 
+        const { list } = this.props;
+
         let keyCounter = 0;
         let Sents;
         if (body.length){
@@ -191,7 +197,7 @@ class Main extends Component {
         return (
             <Container ref={ref => { this.con = ref; }}>
                 <Row type="flex" justify="space-between" style={{marginBottom: 20}}>
-                    <List onChange={this.handleSelectChange}/>
+                    <List number={number} list={list} onChange={this.handleSelectChange}/>
                     {/* <Clock/> */}
                     {number && <PointContainer>
                         已完成 { finishedNum } / { totalNum }
@@ -216,4 +222,17 @@ class Main extends Component {
     }
 }
 
-export default Main;
+Main.propTypes = {
+    list: PropTypes.arrayOf(PropTypes.shape({
+        number: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+    })).isRequired,
+};
+
+function mapStateToProps(state){
+    return {
+        list: state.articleReducer.list
+    }
+}
+
+export default connect(mapStateToProps)(Main);
