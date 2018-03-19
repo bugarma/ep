@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Row, Dropdown, Menu, Icon } from 'antd';
 import { connect } from "react-redux";
-import { fetchList } from "../../actions/articleAction";
+import { fetchList, fetchArticle } from "../../actions/articleAction";
 
 const Wrapper = styled(Row)`
     height: 100%;
@@ -73,7 +73,8 @@ class Intro extends Component {
         super(props);
 
         this.handleClick = ({ key }) => {
-            this.props.onChange(key);
+            this.props.fetchArticle(key);
+            this.props.change(key);
         }
     }
 
@@ -105,12 +106,12 @@ class Intro extends Component {
 }
 
 Intro.propTypes = {
-    onChange: PropTypes.func.isRequired,
     list: PropTypes.arrayOf(PropTypes.shape({
         number: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
     })).isRequired,
     fetchList: PropTypes.func.isRequired,
+    fetchArticle: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -119,4 +120,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { fetchList })(Intro);
+export default connect(mapStateToProps, { fetchList, fetchArticle })(Intro);

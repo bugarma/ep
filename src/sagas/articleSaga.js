@@ -1,9 +1,13 @@
 import { call, put } from 'redux-saga/effects';
-import { fetchListSuccess, fetchListFailure } from "../actions/articleAction";
+import {
+    fetchListSuccess,
+    fetchListFailure,
+    fetchArticleSuccess,
+    fetchArticleFailure,
+} from "../actions/articleAction";
 import api from '../api';
 
-
-export default function* fetchListSaga() {
+export function* fetchListSaga() {
     try {
         const list = yield call(api.articleList);
         yield put(fetchListSuccess(list));
@@ -11,3 +15,12 @@ export default function* fetchListSaga() {
         yield put(fetchListFailure(err));
     }
 };
+
+export function* fetchArticleSaga(action) {
+    try {
+        const body = yield call(api.fetchArticle, action.number);
+        yield put(fetchArticleSuccess(body));
+    } catch (error) {
+        yield put(fetchArticleFailure(error));
+    }
+}

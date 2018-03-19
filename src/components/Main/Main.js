@@ -116,7 +116,8 @@ class Main extends Component {
                         eng,
                         cht
                     };
-                })                
+                });
+                console.log(body);
                 this.setState({
                     line: 0,
                     index: 0,
@@ -163,14 +164,10 @@ class Main extends Component {
     }
 
     render() {
-        const { line, index, currentInput, finished, body, number } = this.state;
-        if(number === null){
-            return (
-                <Intro onChange={this.handleSelectChange}/>
-            );
-        }
+        const { line, index, currentInput, finished } = this.state;
+        const { list, number, body } = this.props;
 
-        const { list } = this.props;
+        if(number === "") return <Intro change={this.handleSelectChange} />;
 
         let keyCounter = 0;
         let Sents;
@@ -227,11 +224,18 @@ Main.propTypes = {
         number: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
     })).isRequired,
+    number: PropTypes.string.isRequired,
+    body: PropTypes.arrayOf(PropTypes.shape({
+        cht: PropTypes.string.isRequired,
+        eng: PropTypes.string.isRequired,
+    }),).isRequired,
 };
 
 function mapStateToProps(state){
     return {
-        list: state.articleReducer.list
+        list: state.articleReducer.list,
+        number: state.articleReducer.number,
+        body: state.articleReducer.body
     }
 }
 
