@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { Row, Dropdown, Menu, Icon } from 'antd';
+import { Row, Dropdown, Menu, Icon, Spin } from 'antd';
 import { connect } from "react-redux";
 import { fetchList, fetchArticle } from "../../actions/articleAction";
 
@@ -28,6 +28,8 @@ const Wrapper = styled(Row)`
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
+        width: 100%;
+        text-align:center;
     }
 
     .box {
@@ -74,7 +76,6 @@ class Intro extends Component {
 
         this.handleClick = ({ key }) => {
             this.props.fetchArticle(key);
-            this.props.change(key);
         }
     }
 
@@ -83,8 +84,8 @@ class Intro extends Component {
     }
 
     render() {
-        const { list } = this.props;
-
+        const { list, loaded } = this.props;
+        
         const menu = (<MyMenu options={list} handleClick={this.handleClick}/>);
 
         return (
@@ -93,12 +94,15 @@ class Intro extends Component {
                     Practing English by Typing
                 </div>
                 <div className="drop">
-                    <Dropdown overlay={menu} placement="bottomCenter">
+                    {loaded && <Dropdown overlay={menu} placement="bottomCenter">
                         <div>
                             <span className="text">Select an Article to Start !</span> <Icon type="down" style={{fontSize: 'inherit'}} className="button" />
                             <div className="box" />
                         </div>
-                    </Dropdown>
+                    </Dropdown>}
+                    {!loaded && <div className="text">
+                        loading... <Spin/>
+                    </div>}
                 </div>
             </Wrapper>
         );
@@ -112,11 +116,13 @@ Intro.propTypes = {
     })).isRequired,
     fetchList: PropTypes.func.isRequired,
     fetchArticle: PropTypes.func.isRequired,
+    loaded: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {
     return {
-        list: state.articleReducer.list
+        list: state.articleReducer.list,
+        loaded: state.articleReducer.loaded,
     }
 }
 
