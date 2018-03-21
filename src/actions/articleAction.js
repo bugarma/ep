@@ -5,6 +5,7 @@ import {
     FETCH_ARTICLE,
     FETCH_ARTICLE_SUCCESS,
     FETCH_ARTICLE_FAILURE,
+    LINE_FINISHED,
 } from "../types";
 
 export const fetchList = () => ({
@@ -36,4 +37,7 @@ export const fetchArticleFailure = (error) => ({
     error
 })
 
-
+export const lineFinished = (line) => ({
+    type: LINE_FINISHED,
+    line
+})
