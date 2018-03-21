@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Progress, Col, Row, Button } from "antd";
+import { Progress, Col, Row, Button, Spin } from "antd";
 import styled from 'styled-components';
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -33,6 +33,30 @@ const IframeWrapper = styled.div`
     }
 `;
 
+const LoadingWrapper = styled(Row)`
+    font-size: 4em;
+    height: calc(100vh - 200px);
+
+    .text {
+        background: #c2e59c;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to left, #64b3f4, #c2e59c);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to left, #64b3f4, #c2e59c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        width: 100%;
+        text-align:center;
+    }
+`;
+
+const Loading = () => (
+    <LoadingWrapper type="flex" justify="center" align="middle">
+        <div className="text">
+            Loading...  <Spin />
+        </div>
+    </LoadingWrapper>
+)
+
 class Main extends Component {
     constructor(props) {
         super(props);
@@ -51,7 +75,7 @@ class Main extends Component {
     }
 
     render() {
-        const { list, number, finished } = this.props;
+        const { list, number, finished, loaded } = this.props;
 
         if(number === "") return <Intro/>;
 
@@ -69,7 +93,8 @@ class Main extends Component {
                     </PointContainer>
                     <span><Button icon="reload" onClick={this.resetStorage}>Reset</Button></span>
                 </Row>
-                <Row gutter={20}>
+                {!loaded && <Loading />}
+                {loaded && <Row gutter={20}>
                     <Col span={12}>
                         <IframeWrapper>
                             <iframe title="embed" src={`https://tw.voicetube.com/embed/${number}`} frameBorder="0" allowFullScreen/>
@@ -78,7 +103,7 @@ class Main extends Component {
                     <Col span={12}>
                         <Sentence/>
                     </Col>
-                </Row>
+                </Row>}
             </Container>
         );
     }
@@ -91,10 +116,6 @@ Main.propTypes = {
     })).isRequired,
     number: PropTypes.string.isRequired,
     finished: PropTypes.arrayOf(PropTypes.bool).isRequired,
-    // body: PropTypes.arrayOf(PropTypes.shape({
-    //     cht: PropTypes.string.isRequired,
-    //     eng: PropTypes.string.isRequired,
-    // }),).isRequired,
 };
 
 function mapStateToProps(state){
@@ -103,6 +124,7 @@ function mapStateToProps(state){
         number: state.articleReducer.number,
         body: state.articleReducer.body,
         finished: state.articleReducer.finished,
+        loaded: state.articleReducer.loaded,
     }
 }
 
