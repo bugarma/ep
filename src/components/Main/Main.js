@@ -4,10 +4,11 @@ import styled from 'styled-components';
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
+import { fetchArticle } from "../../actions/articleAction";
 import Sentence from '../Sentence/Sentence';
 import List from './List';
-import Clock from "./Clock";
 import Intro from "./Intro";
+import Clock from "./Clock";
 
 
 const Container = styled.div`
@@ -85,7 +86,7 @@ class Main extends Component {
         return (
             <Container ref={ref => { this.con = ref; }}>
                 <Row type="flex" justify="space-between" style={{marginBottom: 20}}>
-                    <List number={number} list={list} onChange={this.handleSelectChange}/>
+                    <List number={number} list={list} onChange={this.props.fetchArticle}/>
                     {/* <Clock/> */}
                     <PointContainer>
                         已完成 { finishedNum } / { totalNum }
@@ -116,6 +117,8 @@ Main.propTypes = {
     })).isRequired,
     number: PropTypes.string.isRequired,
     finished: PropTypes.arrayOf(PropTypes.bool).isRequired,
+    fetchArticle: PropTypes.func.isRequired,
+    loaded: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state){
@@ -128,4 +131,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps)(Main);
+export default connect(mapStateToProps, { fetchArticle })(Main);
