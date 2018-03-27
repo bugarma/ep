@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { animateScroll as scroll } from "react-scroll";
 
 import { lineFinished } from "../../actions/articleAction";
+import { finishTyping } from "../../actions/controlAction";
 
 const SentWrapper = styled.div`
     height: calc(100vh - 200px);
@@ -59,6 +60,7 @@ class Sentence extends Component {
                     
                     this.props.lineFinished(line);
                     line += 1;
+                    if(line >= body.length) this.props.finishTyping();
                     this.setState({ index, line, currentInput: "" });
                     this.scrollToView(this.sents[line]);
                 } else if (!currentInput) {
@@ -160,6 +162,7 @@ Sentence.propTypes = {
     }),).isRequired,
     finished: PropTypes.arrayOf(PropTypes.bool).isRequired,
     lineFinished: PropTypes.func.isRequired,
+    finishTyping: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state){
@@ -169,4 +172,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { lineFinished })(Sentence);
+export default connect(mapStateToProps, { lineFinished, finishTyping })(Sentence);

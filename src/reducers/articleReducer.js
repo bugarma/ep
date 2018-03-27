@@ -6,6 +6,7 @@ import {
     FETCH_ARTICLE_SUCCESS,
     FETCH_ARTICLE_FAILURE,
     LINE_FINISHED,
+    RESET_TYPING,
 } from "../types";
 
 const defaultState = {

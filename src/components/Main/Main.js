@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import { fetchArticle } from "../../actions/articleAction";
+import { startTyping } from "../../actions/controlAction";
 import Sentence from '../Sentence/Sentence';
 import List from './List';
 import Intro from "./Intro";
@@ -56,27 +57,28 @@ const Loading = () => (
             Loading...  <Spin />
         </div>
     </LoadingWrapper>
-)
+);
+
+const FakeClock = styled.div`
+    font-size: 1.5em;
+    width: 100px;
+`;
 
 class Main extends Component {
     constructor(props) {
         super(props);
 
         this.sents = [];
-
-        // this.resetStorage = () => {
-        //     localStorage.removeItem(this.state.number);
-        //     this.setState({
-        //         line: 0,
-        //         index: 0,
-        //         currentInput: '',
-        //         finished: Array(this.state.body.length).fill(false),
-        //     });
-        // }
     }
 
     render() {
-        const { list, number, finished, loaded } = this.props;
+        const {
+            list,
+            number,
+            finished,
+            loaded,
+            start
+        } = this.props;
 
         if(number === "") return <Intro/>;
 
@@ -87,12 +89,11 @@ class Main extends Component {
             <Container ref={ref => { this.con = ref; }}>
                 <Row type="flex" justify="space-between" style={{marginBottom: 20}}>
                     <List number={number} list={list} onChange={this.props.fetchArticle}/>
-                    {/* <Clock/> */}
+                    {start? <Clock/>: <FakeClock>0 s</FakeClock>}
                     <PointContainer>
                         已完成 { finishedNum } / { totalNum }
                         <Progress percent={finishedNum/totalNum * 100} showInfo={false}/>
                     </PointContainer>
-                    <span><Button icon="reload" onClick={this.resetStorage}>Reset</Button></span>
                 </Row>
                 {!loaded && <Loading />}
                 {loaded && <Row gutter={20}>
@@ -102,7 +103,7 @@ class Main extends Component {
                         </IframeWrapper>
                     </Col>
                     <Col span={12}>
-                        <Sentence/>
+                        {start? <Sentence/> : <Button onClick={this.props.startTyping}>Click to Start</Button>}
                     </Col>
                 </Row>}
             </Container>
@@ -119,6 +120,8 @@ Main.propTypes = {
     finished: PropTypes.arrayOf(PropTypes.bool).isRequired,
     fetchArticle: PropTypes.func.isRequired,
     loaded: PropTypes.bool.isRequired,
+    start: PropTypes.bool.isRequired,
+    startTyping: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state){
@@ -128,7 +131,8 @@ function mapStateToProps(state){
         body: state.articleReducer.body,
         finished: state.articleReducer.finished,
         loaded: state.articleReducer.loaded,
+        start: state.control.start
     }
 }
 
-export default connect(mapStateToProps, { fetchArticle })(Main);
+export default connect(mapStateToProps, { fetchArticle, startTyping })(Main);
