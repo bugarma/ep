@@ -22,8 +22,17 @@ export default {
 
         const body = spans.map(e => {
             const s = e.innerHTML.split(/(?:<br>)|(?:<br\/>)/);
-            const eng = new DOMParser().parseFromString(s[0], "text/html").querySelector('body').textContent.trim();
-            const cht = new DOMParser().parseFromString(s[1], "text/html").querySelector('body').textContent.trim();
+            const eng = new DOMParser()
+                .parseFromString(s[0], "text/html")
+                .querySelector('body')
+                .textContent
+                .trim()
+                .replace(/[^\w !?".()-]/g, "");
+            const cht = new DOMParser()
+                .parseFromString(s[1], "text/html")
+                .querySelector('body')
+                .textContent
+                .trim();
 
             return {
                 eng,
