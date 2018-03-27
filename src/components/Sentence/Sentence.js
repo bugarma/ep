@@ -9,7 +9,7 @@ import { lineFinished } from "../../actions/articleAction";
 import { finishTyping } from "../../actions/controlAction";
 
 const SentWrapper = styled.div`
-    height: calc(100vh - 200px);
+    height: 100%;
     overflow: auto;
 `;
 

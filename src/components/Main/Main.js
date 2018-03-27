@@ -23,9 +23,14 @@ const PointContainer = styled.h2`
     color: #64b3f4;
 `;
 
+const MainWrapper = styled(Row)`
+    height: calc(100vh - 200px);
+`
+
 const IframeWrapper = styled.div`
     position: relative;
-    height: calc(100vh - 200px);
+    height: 100%;
+    /* height: calc(100vh - 200px); */
     iframe {
         position: absolute;
         top: 0;
@@ -49,6 +54,10 @@ const LoadingWrapper = styled(Row)`
         width: 100%;
         text-align:center;
     }
+`;
+
+const ButtonWrapper = styled(Row)`
+    height: 100%;
 `;
 
 const Loading = () => (
@@ -96,16 +105,18 @@ class Main extends Component {
                     </PointContainer>
                 </Row>
                 {!loaded && <Loading />}
-                {loaded && <Row gutter={20}>
+                {loaded && <MainWrapper gutter={20} type="flex">
                     <Col span={12}>
                         <IframeWrapper>
                             <iframe title="embed" src={`https://tw.voicetube.com/embed/${number}`} frameBorder="0" allowFullScreen/>
                         </IframeWrapper>
                     </Col>
                     <Col span={12}>
-                        {start? <Sentence/> : <Button onClick={this.props.startTyping}>Click to Start</Button>}
+                        {start? <Sentence/> : <ButtonWrapper type="flex" align="middle" justify="center">
+                            <Button onClick={this.props.startTyping}>Click to Start</Button>
+                        </ButtonWrapper>}
                     </Col>
-                </Row>}
+                </MainWrapper>}
             </Container>
         );
     }
