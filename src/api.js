@@ -27,7 +27,7 @@ export default {
                 .querySelector('body')
                 .textContent
                 .trim()
-                .replace(/[^\w !?".()-]/g, "");
+                .replace(/[^\w !?"'.()-]/g, "");
             const cht = new DOMParser()
                 .parseFromString(s[1], "text/html")
                 .querySelector('body')
