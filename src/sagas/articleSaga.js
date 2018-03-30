@@ -12,7 +12,7 @@ export function* fetchListSaga() {
         const list = yield call(api.articleList);
         yield put(fetchListSuccess(list));
     } catch(err) {
-        yield put(fetchListFailure(err));
+        yield put(fetchListFailure(err.message));
     }
 };
 
@@ -21,6 +21,6 @@ export function* fetchArticleSaga(action) {
         const body = yield call(api.fetchArticle, action.number);
         yield put(fetchArticleSuccess(body));
     } catch (error) {
-        yield put(fetchArticleFailure(error));
+        yield put(fetchArticleFailure(error.message));
     }
 }

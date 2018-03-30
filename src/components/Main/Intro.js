@@ -84,7 +84,8 @@ class Intro extends Component {
     }
 
     render() {
-        const { list, loaded } = this.props;
+        const { list, loaded, error } = this.props;
+        if (error) console.dir(error);
         
         const menu = (<MyMenu options={list} handleClick={this.handleClick}/>);
 
@@ -94,12 +95,15 @@ class Intro extends Component {
                     Practing English by Typing
                 </div>
                 <div className="drop">
-                    {loaded && <Dropdown overlay={menu} placement="bottomCenter">
+                    {loaded && !error && <Dropdown overlay={menu} placement="bottomCenter">
                         <div>
                             <span className="text">Select an Article to Start !</span> <Icon type="down" style={{fontSize: 'inherit'}} className="button" />
                             <div className="box" />
                         </div>
                     </Dropdown>}
+                    {error && <div className="text">
+                        {error} Please Refresh Later...
+                    </div> }
                     {!loaded && <div className="text">
                         loading... <Spin/>
                     </div>}
@@ -123,6 +127,7 @@ function mapStateToProps(state) {
     return {
         list: state.articleReducer.list,
         loaded: state.articleReducer.loaded,
+        error: state.articleReducer.error,
     }
 }
 
