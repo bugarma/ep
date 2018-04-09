@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Divider, Icon } from "antd";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -28,6 +28,21 @@ const EngContainer = styled.h3`
     .wrong {
         color: red;
     }
+`;
+
+const blink = keyframes`
+    from {
+        border-color: white;
+    }
+    to {
+        border-color: grey;
+    }
+`;
+
+const Cursor = styled.span`
+    border: grey solid 1px;
+
+    animation: ${blink} 1s cubic-bezier(1, 0, 0, 1) infinite;
 `;
 
 class Sentence extends Component {
@@ -130,16 +145,22 @@ class Sentence extends Component {
                     <div>
                         <h3>{cht}</h3>
                         <EngContainer>
-                            {isCurrentLine && !isFinished && (
-                                <span>
-                                    <span className="finished">{eng.slice(0, index - currentInput.length)}</span>
-                                    <span className="wrong">{currentInput}</span>
-                                    <span className="not-finished">{eng.slice(index)}</span>
-                                </span>
-                            )}
-                            {isFinished && <span className="finished">{eng}<Icon className="check" type="check-circle-o" /></span>
+                            {
+                                isCurrentLine && !isFinished && (
+                                    <span>
+                                        <span className="finished">{eng.slice(0, index - currentInput.length)}</span>
+                                        <span className="wrong">{currentInput}</span>
+                                        <Cursor/>
+                                        <span className="not-finished">{eng.slice(index)}</span>
+                                    </span>
+                                )
                             }
-                            {!isCurrentLine && !isFinished && <span className="not-finished">{eng}</span>}
+                            {
+                                isFinished && <span className="finished">{eng}<Icon className="check" type="check-circle-o" /></span>
+                            }
+                            {
+                                !isCurrentLine && !isFinished && <span className="not-finished">{eng}</span>
+                            }
                         </EngContainer>
                         <Divider />
                     </div>
