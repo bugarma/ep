@@ -98,7 +98,7 @@ class Main extends Component {
             <Container ref={ref => { this.con = ref; }}>
                 <Row type="flex" justify="space-between" style={{marginBottom: 20}}>
                     <List number={number} list={list} onChange={this.props.fetchArticle}/>
-                    {start? <Clock/>: <FakeClock>0 s</FakeClock>}
+                    {start? <Clock/>: <FakeClock>0.00 s</FakeClock>}
                     <PointContainer>
                         已完成 { finishedNum } / { totalNum }
                         <Progress percent={finishedNum/totalNum * 100} showInfo={false}/>
