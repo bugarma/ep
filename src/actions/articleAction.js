@@ -8,13 +8,14 @@ import {
     LINE_FINISHED,
 } from "../types";
 
-export const fetchList = () => ({
-    type: FETCH_LIST
+export const fetchList = (url) => ({
+    type: FETCH_LIST,
+    url
 });
 
 export const fetchListSuccess = (list) => ({
     type: FETCH_LIST_SUCCESS,
-    list
+    list,
 });
 
 export const fetchListFailure = (error) => ({

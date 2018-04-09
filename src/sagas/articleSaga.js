@@ -7,9 +7,9 @@ import {
 } from "../actions/articleAction";
 import api from '../api';
 
-export function* fetchListSaga() {
+export function* fetchListSaga({url}) {
     try {
-        const list = yield call(api.articleList);
+        const list = yield call(api.articleList, url);
         yield put(fetchListSuccess(list));
     } catch(err) {
         yield put(fetchListFailure(err.message));

@@ -80,7 +80,7 @@ class Intro extends Component {
     }
 
     componentDidMount(){
-        this.props.fetchList();
+        this.props.fetchList('https://tw.voicetube.com/channel/educational_videos/1?order-type=pop&order-pop=hot&ref=nav-sub');
     }
 
     render() {
