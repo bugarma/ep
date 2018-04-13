@@ -89,7 +89,7 @@ class Main extends Component {
             start
         } = this.props;
 
-        if(number === "") return <Intro/>;
+        if(number === "") return (<Intro/>);
 
         const finishedNum = finished.reduce((a, b) => a + b, 0);
         const totalNum = finished.length;
