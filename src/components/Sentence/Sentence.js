@@ -13,29 +13,46 @@ const SentWrapper = styled.div`
     overflow: auto;
 `;
 
-const EngContainer = styled.h3`
-    white-space: pre-line;
-    
-    .check {
-        color: #46C8AE;
-    }
-    .finished {
-        color: #000;
-    }
-    .not-finished {
-        color: #B1B1B1;
-    }
-    .wrong {
-        color: red;
-    }
-`;
-
 const blink = keyframes`
     from {
         border-color: white;
     }
     to {
         border-color: grey;
+    }
+`;
+
+const EngContainer = styled.h3`
+    white-space: pre-line;
+    
+    .check {
+        color: #46C8AE;
+    }
+    .padding {
+        padding-left: 2px;
+    }
+    .finished {
+        color: #000;
+        position: relative;
+        z-index: 3;
+    }
+    .not-finished {
+        color: #B1B1B1;
+        position: relative;
+        z-index: 2;
+    }
+    .cursor::before {
+        content: '';
+        z-index: -1;
+        height: 1em;
+        top: 2px;
+        position: absolute;
+        left: -1px;
+        border: grey solid 1px;
+        animation: ${blink} 1s cubic-bezier(1, 0, 0, 1) infinite;
+    }
+    .wrong {
+        color: red;
     }
 `;
 
@@ -147,19 +164,22 @@ class Sentence extends Component {
                         <EngContainer>
                             {
                                 isCurrentLine && !isFinished && (
-                                    <span>
+                                    <div className="padding">
                                         <span className="finished">{eng.slice(0, index - currentInput.length)}</span>
                                         <span className="wrong">{currentInput}</span>
-                                        <Cursor/>
-                                        <span className="not-finished">{eng.slice(index)}</span>
-                                    </span>
+                                        <span className="not-finished cursor">{eng.slice(index)}</span>
+                                    </div>
                                 )
                             }
                             {
-                                isFinished && <span className="finished">{eng}<Icon className="check" type="check-circle-o" /></span>
+                                isFinished && <div className="padding">
+                                    <span className="finished">{eng}<Icon className="check" type="check-circle-o" /></span>
+                                </div>
                             }
                             {
-                                !isCurrentLine && !isFinished && <span className="not-finished">{eng}</span>
+                                !isCurrentLine && !isFinished && <div className="padding">
+                                    <span className="not-finished">{eng}</span>
+                                </div>
                             }
                         </EngContainer>
                         <Divider />
