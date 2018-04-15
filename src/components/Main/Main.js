@@ -80,8 +80,8 @@ class Main extends Component {
         this.sents = [];
     }
 
-    handleListChange = () => {
-        this.props.fetchArticle();
+    handleListChange = (number) => {
+        this.props.fetchArticle(number);
         this.props.resetTyping();
     }
 
