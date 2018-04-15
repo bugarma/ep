@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import { fetchArticle } from "../../actions/articleAction";
-import { startTyping } from "../../actions/controlAction";
+import { startTyping, resetTyping } from "../../actions/controlAction";
 import Sentence from '../Sentence/Sentence';
 import List from './List';
 import Intro from "./Intro";
@@ -45,9 +45,9 @@ const LoadingWrapper = styled(Row)`
     height: calc(100vh - 200px);
 
     .text {
-        background: #c2e59c;  /* fallback for old browsers */
-        background: -webkit-linear-gradient(to left, #64b3f4, #c2e59c);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to left, #64b3f4, #c2e59c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        background: #c2e59c;
+        background: -webkit-linear-gradient(to left, #64b3f4, #c2e59c);
+        background: linear-gradient(to left, #64b3f4, #c2e59c);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -80,6 +80,11 @@ class Main extends Component {
         this.sents = [];
     }
 
+    handleListChange = () => {
+        this.props.fetchArticle();
+        this.props.resetTyping();
+    }
+
     render() {
         const {
             list,
@@ -97,8 +102,8 @@ class Main extends Component {
         return (
             <Container ref={ref => { this.con = ref; }}>
                 <Row type="flex" justify="space-between" style={{marginBottom: 20}}>
-                    <List number={number} list={list} onChange={this.props.fetchArticle}/>
-                    {start? <Clock/>: <FakeClock>0.00 s</FakeClock>}
+                    <List number={number} list={list} onChange={this.handleListChange}/>
+                    {start? <Clock number={number} />: <FakeClock>0.00 s</FakeClock>}
                     <PointContainer>
                         已完成 { finishedNum } / { totalNum }
                         <Progress percent={finishedNum/totalNum * 100} showInfo={false}/>
@@ -133,6 +138,7 @@ Main.propTypes = {
     loaded: PropTypes.bool.isRequired,
     start: PropTypes.bool.isRequired,
     startTyping: PropTypes.func.isRequired,
+    resetTyping: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state){
@@ -146,4 +152,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { fetchArticle, startTyping })(Main);
+export default connect(mapStateToProps, { fetchArticle, startTyping, resetTyping })(Main);
