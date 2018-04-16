@@ -26,13 +26,14 @@ export default {
                 .parseFromString(s[0], "text/html")
                 .querySelector('body')
                 .textContent
-                .trim()
+                .replace(/\s+/gm, ' ')
+                .replace(/^\s+|\s+$/gm,'')
                 .replace(/[^\w !?"'.()-]/g, "");
             const cht = new DOMParser()
                 .parseFromString(s[1], "text/html")
                 .querySelector('body')
                 .textContent
-                .trim();
+                .replace(/^\s+|\s+$/gm,'');
 
             return {
                 eng,
